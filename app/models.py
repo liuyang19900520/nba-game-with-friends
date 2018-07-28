@@ -1,3 +1,5 @@
+from marshmallow import post_dump
+
 from . import db
 from . import ma
 
@@ -17,6 +19,10 @@ class AthleteBasic(db.Model):
 class AthleteBasicSchema(ma.ModelSchema):
     class Meta:
         model=AthleteBasic
+    # Again, add an envelope to responses
+    @post_dump(pass_many=True)
+    def wrap(self, data, many):
+        return data
 
     # def to_json(self):
     #     return {

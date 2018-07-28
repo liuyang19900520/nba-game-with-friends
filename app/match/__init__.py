@@ -6,4 +6,4 @@ from .views import Test
 match = Blueprint('match', __name__)
 
 resource = Api(match)
-resource.add_resource(Test, "/")  # 设置路由
+resource.add_resource(Test, "/test")  # 设置路由
