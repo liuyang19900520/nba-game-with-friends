@@ -16,24 +16,41 @@ class AthleteBasic(db.Model):
     def __repr__(self):
         return '<User %r>' % self.athlete_name
 
+
 class AthleteBasicSchema(ma.ModelSchema):
     class Meta:
-        model=AthleteBasic
+        model = AthleteBasic
+
     # Again, add an envelope to responses
     @post_dump(pass_many=True)
     def wrap(self, data, many):
         return data
 
-    # def to_json(self):
-    #     return {
-    #         'athlete_id': self.athlete_id,
-    #         'athlete_name': self.athlete_name,
-    #         'c_adaptability': self.c_adaptability,
-    #         'pf_adaptability': self.pf_adaptability,
-    #         'sf_adaptability': self.sf_adaptability,
-    #         'sg_adaptability': self.sg_adaptability,
-    #         'pg_adaptability': self.pg_adaptability
-    #     }
-    #
-    # def as_dict(self):
-    #     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class RatingOverallOutsideScoring(db.Model):
+    athlete_id = db.Column(db.Integer, primary_key=True)
+    open_shot_mid = db.Column(db.Integer)
+    open_shot_3pt = db.Column(db.Integer)
+    shot_iq = db.Column(db.Integer)
+    off_dribble_shot_mid = db.Column(db.Integer)
+    off_dribble_shot_3pt = db.Column(db.Integer)
+    free_throw = db.Column(db.Integer)
+    contested_shot_mid = db.Column(db.Integer)
+    contested_shot_3pt = db.Column(db.Integer)
+    offensive_consistency = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<OutsideScoring %f>' % ((
+                                                self.open_shot_mid + self.open_shot_3pt + self.shot_iq
+                                                + self.off_dribble_shot_mid + self.off_dribble_shot_3pt
+                                                + self.free_throw + self.contested_shot_mid + self.contested_shot_3pt + self.offensive_consistency) / 9)
+
+
+class RatingOverallOutsideScoringSchema(ma.ModelSchema):
+    class Meta:
+        model = RatingOverallOutsideScoring
+
+    # Again, add an envelope to responses
+    @post_dump(pass_many=True)
+    def wrap(self, data, many):
+        return data
